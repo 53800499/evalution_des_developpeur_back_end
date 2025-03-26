@@ -1,0 +1,11 @@
+user :
+
+id 
+unique_id
+firstName
+lastName
+email
+password
+last_login
+is_verified
+skills

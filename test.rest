@@ -1,0 +1,10 @@
+POST http://localhost:3000/api/users
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYsImlhdCI6MTc0Mjk2ODk3MiwiZXhwIjoxNzQzMDU1MzcyfQ.n_9B23nKoRd1GjgaNWzb0CkS_ZaFGj_klEP5_G__QMA
+Content-Type: application/json
+
+{
+  "firstName": "Junior",
+  "lastName": "Boss",
+  "email": "boss@example.com",
+  "password": "MotDePasse123!"
+}
