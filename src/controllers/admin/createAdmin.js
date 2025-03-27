@@ -1,15 +1,15 @@
 const bcrypt = require("bcrypt");
-const { User } = require("../../db/sequelize");
+const { Admin } = require("../../db/sequelize");
 const { ValidationError, UniqueConstraintError } = require("sequelize");
 
-const createUser = async (req, res) => {
+const createAdmin = async (req, res) => {
   try {
     const { firstName, lastName, email, password } = req.body;
 
     // Validation des champs obligatoires
     if (!firstName || !lastName || !email || !password) {
       return res.status(400).json({
-        message: "Tous les champs obligatoires doivent être remplis.",
+        message: "Les champs firstName, lastName, email et password sont obligatoires.",
       });
     }
 
@@ -24,33 +24,31 @@ const createUser = async (req, res) => {
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    // Création de l'utilisateur
-    const user = await User.create({
+    // Création de l'administrateur
+    const admin = await Admin.create({
       firstName,
       lastName,
       email,
       password: hashedPassword,
       last_login: null,
       is_verified: false,
-      skills: [],
     });
 
     // On ne renvoie pas le mot de passe dans la réponse
-    const userResponse = {
-      id: user.id,
-      unique_id: user.unique_id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      is_verified: user.is_verified,
-      last_login: user.last_login,
-      skills: user.skills,
-      created_at: user.created_at,
+    const adminResponse = {
+      id: admin.id,
+      unique_id: admin.unique_id,
+      firstName: admin.firstName,
+      lastName: admin.lastName,
+      email: admin.email,
+      is_verified: admin.is_verified,
+      last_login: admin.last_login,
+      created_at: admin.created_at,
     };
 
     res.status(201).json({
-      message: `L'utilisateur ${user.firstName} ${user.lastName} a bien été créé.`,
-      data: userResponse,
+      message: `L'administrateur ${admin.firstName} ${admin.lastName} a bien été créé.`,
+      data: adminResponse,
     });
   } catch (error) {
     if (error instanceof ValidationError) {
@@ -66,12 +64,12 @@ const createUser = async (req, res) => {
       });
     }
 
-    console.error("Erreur lors de la création de l'utilisateur :", error);
+    console.error("Erreur lors de la création de l'administrateur :", error);
     res.status(500).json({
       message:
-        "Échec de la création de l'utilisateur. Veuillez réessayer plus tard.",
+        "Échec de la création de l'administrateur. Veuillez réessayer plus tard.",
     });
   }
 };
 
-module.exports = createUser;
+module.exports = createAdmin; 

@@ -1,14 +1,10 @@
-###############################################
-# API TESTS
-# Ce fichier contient toutes les requêtes pour tester l'API
-# Utilisez l'extension "REST Client" dans VS Code pour exécuter ces requêtes
-###############################################
 
-# Configuration des variables
 @baseUrl = http://localhost:3001
 @contentType = application/json
 @authToken = YOUR_TOKEN_HERE
 @userId = 1
+@recruiterId = 1
+@adminId = 1
 
 ###############################################
 # 1. TESTS DE BASE
@@ -21,7 +17,7 @@ GET {{baseUrl}}/ressources/
 # 2. GESTION DES UTILISATEURS
 ###############################################
 
-### Créer un nouvel utilisateur
+### Créer un nouvel utilisateur(develloper)
 POST {{baseUrl}}/api/users
 Content-Type: {{contentType}}
 
@@ -109,7 +105,199 @@ DELETE {{baseUrl}}/api/users/999
 Authorization: Bearer {{authToken}}
 
 ###############################################
-# 3. TESTS D'ERREURS DIVERSES
+# 3. GESTION DES RECRUTEURS
+###############################################
+
+### Créer un nouveau recruteur
+POST {{baseUrl}}/api/recruiters
+Content-Type: {{contentType}}
+
+{
+  "firstName": "Robert",
+  "lastName": "Johnson",
+  "email": "robert.johnson@example.com",
+  "password": "Recruiter123!",
+  "company": "Tech Solutions Inc.",
+  "position": "Senior Recruiter",
+  "phone": "+1234567890",
+  "website": "https://techsolutions.example.com"
+}
+
+### Créer un autre recruteur
+POST {{baseUrl}}/api/recruiters
+Content-Type: {{contentType}}
+
+{
+  "firstName": "Sarah",
+  "lastName": "Williams",
+  "email": "sarah.williams@example.com",
+  "password": "Recruiter456!",
+  "company": "Global Talent Group",
+  "position": "HR Manager",
+  "phone": "+1987654321",
+  "website": "https://globaltalent.example.com"
+}
+
+### Se connecter en tant que recruteur
+# Cette requête vous donnera un token JWT que vous devrez utiliser pour les autres requêtes
+POST {{baseUrl}}/api/recruiters/login
+Content-Type: {{contentType}}
+
+{
+  "email": "robert.johnson@example.com",
+  "password": "Recruiter123!"
+}
+
+### Se connecter avec des identifiants incorrects (test d'erreur)
+POST {{baseUrl}}/api/recruiters/login
+Content-Type: {{contentType}}
+
+{
+  "email": "robert.johnson@example.com",
+  "password": "WrongPassword!"
+}
+
+### Récupérer tous les recruteurs
+GET {{baseUrl}}/api/recruiters
+Authorization: Bearer {{authToken}}
+
+### Rechercher des recruteurs par nom ou entreprise (query parameter)
+GET {{baseUrl}}/api/recruiters?name=Tech
+Authorization: Bearer {{authToken}}
+
+### Récupérer un recruteur spécifique
+GET {{baseUrl}}/api/recruiters/{{recruiterId}}
+Authorization: Bearer {{authToken}}
+
+### Récupérer un recruteur inexistant (test d'erreur)
+GET {{baseUrl}}/api/recruiters/999
+Authorization: Bearer {{authToken}}
+
+### Mettre à jour un recruteur
+PUT {{baseUrl}}/api/recruiters/{{recruiterId}}
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+  "firstName": "Robert",
+  "lastName": "Johnson",
+  "company": "Tech Solutions Global",
+  "position": "Head of Recruitment",
+  "website": "https://techsolutionsglobal.example.com"
+}
+
+### Mettre à jour un recruteur inexistant (test d'erreur)
+PUT {{baseUrl}}/api/recruiters/999
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+  "firstName": "NonExistent",
+  "lastName": "Recruiter",
+  "company": "Fake Company"
+}
+
+### Supprimer un recruteur
+DELETE {{baseUrl}}/api/recruiters/{{recruiterId}}
+Authorization: Bearer {{authToken}}
+
+### Supprimer un recruteur inexistant (test d'erreur)
+DELETE {{baseUrl}}/api/recruiters/999
+Authorization: Bearer {{authToken}}
+
+###############################################
+# 4. GESTION DES ADMINISTRATEURS
+###############################################
+
+### Créer un nouvel administrateur
+POST {{baseUrl}}/api/admins
+Content-Type: {{contentType}}
+
+{
+  "firstName": "Admin",
+  "lastName": "User",
+  "email": "admin@example.com",
+  "password": "Admin123!"
+}
+
+### Créer un autre administrateur
+POST {{baseUrl}}/api/admins
+Content-Type: {{contentType}}
+
+{
+  "firstName": "Super",
+  "lastName": "Admin",
+  "email": "superadmin@example.com",
+  "password": "SuperAdmin123!"
+}
+
+### Se connecter en tant qu'administrateur
+# Cette requête vous donnera un token JWT que vous devrez utiliser pour les autres requêtes
+POST {{baseUrl}}/api/admins/login
+Content-Type: {{contentType}}
+
+{
+  "email": "admin@example.com",
+  "password": "Admin123!"
+}
+
+### Se connecter avec des identifiants incorrects (test d'erreur)
+POST {{baseUrl}}/api/admins/login
+Content-Type: {{contentType}}
+
+{
+  "email": "admin@example.com",
+  "password": "WrongPassword!"
+}
+
+### Récupérer tous les administrateurs
+GET {{baseUrl}}/api/admins
+Authorization: Bearer {{authToken}}
+
+### Rechercher des administrateurs par nom (query parameter)
+GET {{baseUrl}}/api/admins?name=Admin
+Authorization: Bearer {{authToken}}
+
+### Récupérer un administrateur spécifique
+GET {{baseUrl}}/api/admins/{{adminId}}
+Authorization: Bearer {{authToken}}
+
+### Récupérer un administrateur inexistant (test d'erreur)
+GET {{baseUrl}}/api/admins/999
+Authorization: Bearer {{authToken}}
+
+### Mettre à jour un administrateur
+PUT {{baseUrl}}/api/admins/{{adminId}}
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+  "firstName": "Admin",
+  "lastName": "Updated",
+  "email": "admin.updated@example.com"
+}
+
+### Mettre à jour un administrateur inexistant (test d'erreur)
+PUT {{baseUrl}}/api/admins/999
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+  "firstName": "NonExistent",
+  "lastName": "Admin",
+  "email": "nonexistent@example.com"
+}
+
+### Supprimer un administrateur
+DELETE {{baseUrl}}/api/admins/{{adminId}}
+Authorization: Bearer {{authToken}}
+
+### Supprimer un administrateur inexistant (test d'erreur)
+DELETE {{baseUrl}}/api/admins/999
+Authorization: Bearer {{authToken}}
+
+###############################################
+# 5. TESTS D'ERREURS DIVERSES
 ###############################################
 
 ### Test d'une route inexistante (erreur 404)
@@ -119,11 +307,11 @@ GET {{baseUrl}}/api/nonexistentroute
 GET {{baseUrl}}/api/users
 
 ### Test d'une requête mal formée (erreur 400)
-POST {{baseUrl}}/api/users
+POST {{baseUrl}}/api/admins
 Content-Type: {{contentType}}
 
 {
   "firstName": "Invalid",
-  "lastName": "User"
-  // Email et mot de passe manquants
+  "lastName": "Admin"
+  // Champs obligatoires manquants
 }

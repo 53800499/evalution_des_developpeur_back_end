@@ -25,6 +25,22 @@ require("./src/routes/user/updateUser")(app);
 require("./src/routes/user/deleteUser")(app);
 require("./src/routes/user/login")(app);
 
+// Routes Recruiters
+require("./src/routes/recruiter/findAllRecruiters")(app);
+require("./src/routes/recruiter/findRecruiterByPk")(app);
+require("./src/routes/recruiter/createRecruiter")(app);
+require("./src/routes/recruiter/updateRecruiter")(app);
+require("./src/routes/recruiter/deleteRecruiter")(app);
+require("./src/routes/recruiter/login")(app);
+
+// Routes Admins
+require("./src/routes/admin/findAllAdmins")(app);
+require("./src/routes/admin/findAdminByPk")(app);
+require("./src/routes/admin/createAdmin")(app);
+require("./src/routes/admin/updateAdmin")(app);
+require("./src/routes/admin/deleteAdmin")(app);
+require("./src/routes/admin/login")(app);
+
 // Gestion des erreurs 404
 app.use(({ res }) => {
   const message = `Impossible de récupérer la ressource demandée`;
