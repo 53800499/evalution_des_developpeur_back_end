@@ -1,0 +1,51 @@
+### Test de la page d'accueil
+GET http://localhost:3001/ressources/
+
+### Créer un nouvel utilisateur
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+  "firstName": "Test",
+  "lastName": "User",
+  "email": "test@example.com",
+  "password": "Test123!"
+}
+
+### Se connecter
+POST http://localhost:3001/api/users/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "Test123!"
+}
+
+### Récupérer tous les utilisateurs
+GET http://localhost:3001/api/users
+Authorization: Bearer YOUR_TOKEN_HERE
+
+### Récupérer un utilisateur spécifique
+GET http://localhost:3001/api/users/1
+Authorization: Bearer YOUR_TOKEN_HERE
+
+### Mettre à jour un utilisateur
+PUT http://localhost:3001/api/users/1
+Authorization: Bearer YOUR_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "firstName": "Updated",
+  "lastName": "User",
+  "email": "updated@example.com"
+}
+
+### Supprimer un utilisateur
+DELETE http://localhost:3001/api/users/1
+Authorization: Bearer YOUR_TOKEN_HERE 
+
+
+
+
+MySQL DB Name	MySQL User Name	MySQL Password	MySQL Host Name	PHPMyAdmin
+b32_38610050_hlab	b32_38610050	(Your vPanel Password)	sql113.byethost32.com

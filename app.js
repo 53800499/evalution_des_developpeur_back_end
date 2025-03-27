@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 const { initDb } = require("./src/db/sequelize");
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.SERVER_PORT || 3001;
 
 // Middleware
 app.use(morgan("dev")).use(bodyParser.json());

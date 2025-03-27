@@ -1,0 +1,129 @@
+###############################################
+# API TESTS
+# Ce fichier contient toutes les requêtes pour tester l'API
+# Utilisez l'extension "REST Client" dans VS Code pour exécuter ces requêtes
+###############################################
+
+# Configuration des variables
+@baseUrl = http://localhost:3001
+@contentType = application/json
+@authToken = YOUR_TOKEN_HERE
+@userId = 1
+
+###############################################
+# 1. TESTS DE BASE
+###############################################
+
+### Test de la page d'accueil
+GET {{baseUrl}}/ressources/
+
+###############################################
+# 2. GESTION DES UTILISATEURS
+###############################################
+
+### Créer un nouvel utilisateur
+POST {{baseUrl}}/api/users
+Content-Type: {{contentType}}
+
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "john.doe@example.com",
+  "password": "Password123!"
+}
+
+### Créer un autre utilisateur
+POST {{baseUrl}}/api/users
+Content-Type: {{contentType}}
+
+{
+  "firstName": "Jane",
+  "lastName": "Smith",
+  "email": "jane.smith@example.com",
+  "password": "Password456!"
+}
+
+### Se connecter
+# Cette requête vous donnera un token JWT que vous devrez utiliser pour les autres requêtes
+POST {{baseUrl}}/api/users/login
+Content-Type: {{contentType}}
+
+{
+  "email": "john.doe@example.com",
+  "password": "Password123!"
+}
+
+### Se connecter avec des identifiants incorrects (test d'erreur)
+POST {{baseUrl}}/api/users/login
+Content-Type: {{contentType}}
+
+{
+  "email": "john.doe@example.com",
+  "password": "WrongPassword!"
+}
+
+### Récupérer tous les utilisateurs
+GET {{baseUrl}}/api/users
+Authorization: Bearer {{authToken}}
+
+### Rechercher des utilisateurs par nom (query parameter)
+GET {{baseUrl}}/api/users?name=John
+Authorization: Bearer {{authToken}}
+
+### Récupérer un utilisateur spécifique
+GET {{baseUrl}}/api/users/{{userId}}
+Authorization: Bearer {{authToken}}
+
+### Récupérer un utilisateur inexistant (test d'erreur)
+GET {{baseUrl}}/api/users/999
+Authorization: Bearer {{authToken}}
+
+### Mettre à jour un utilisateur
+PUT {{baseUrl}}/api/users/{{userId}}
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+  "firstName": "John",
+  "lastName": "Updated",
+  "email": "john.updated@example.com"
+}
+
+### Mettre à jour un utilisateur inexistant (test d'erreur)
+PUT {{baseUrl}}/api/users/999
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+  "firstName": "NonExistent",
+  "lastName": "User",
+  "email": "nonexistent@example.com"
+}
+
+### Supprimer un utilisateur
+DELETE {{baseUrl}}/api/users/{{userId}}
+Authorization: Bearer {{authToken}}
+
+### Supprimer un utilisateur inexistant (test d'erreur)
+DELETE {{baseUrl}}/api/users/999
+Authorization: Bearer {{authToken}}
+
+###############################################
+# 3. TESTS D'ERREURS DIVERSES
+###############################################
+
+### Test d'une route inexistante (erreur 404)
+GET {{baseUrl}}/api/nonexistentroute
+
+### Test d'une requête sans token d'authentification (erreur 401)
+GET {{baseUrl}}/api/users
+
+### Test d'une requête mal formée (erreur 400)
+POST {{baseUrl}}/api/users
+Content-Type: {{contentType}}
+
+{
+  "firstName": "Invalid",
+  "lastName": "User"
+  // Email et mot de passe manquants
+}
