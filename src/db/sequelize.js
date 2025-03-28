@@ -3,6 +3,7 @@ const { Sequelize, DataTypes } = require("sequelize");
 const UserModel = require("../models/user");
 const RecruiterModel = require("../models/recruiter");
 const AdminModel = require("../models/admin");
+const CodeTestModel = require("../models/code_test");
 
 // Configuration de la base de données
 const sequelize = new Sequelize(
@@ -30,6 +31,7 @@ const sequelize = new Sequelize(
 const User = UserModel(sequelize, DataTypes);
 const Recruiter = RecruiterModel(sequelize, DataTypes);
 const Admin = AdminModel(sequelize, DataTypes);
+const CodeTest = CodeTestModel(sequelize, DataTypes);
 
 const initDb = async () => {
   try {
@@ -58,4 +60,5 @@ module.exports = {
   User,
   Recruiter,
   Admin,
+  CodeTest
 };

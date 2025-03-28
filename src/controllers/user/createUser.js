@@ -1,15 +1,16 @@
 const bcrypt = require("bcrypt");
 const { User } = require("../../db/sequelize");
 const { ValidationError, UniqueConstraintError } = require("sequelize");
+const { v4: uuidv4 } = require('uuid');
 
 const createUser = async (req, res) => {
   try {
-    const { firstName, lastName, email, password } = req.body;
+    const { name, email, password, role } = req.body;
 
     // Validation des champs obligatoires
-    if (!firstName || !lastName || !email || !password) {
+    if (!name || !email || !password || !role) {
       return res.status(400).json({
-        message: "Tous les champs obligatoires doivent être remplis.",
+        message: "Tous les champs obligatoires doivent être remplis (name, email, password, role).",
       });
     }
 
@@ -19,29 +20,39 @@ const createUser = async (req, res) => {
         message: "Le mot de passe doit contenir au moins 8 caractères.",
       });
     }
+    
+    // Validation du rôle
+    if (!['developer', 'admin', 'recruiter'].includes(role)) {
+      return res.status(400).json({
+        message: "Le rôle doit être 'developer', 'admin' ou 'recruiter'.",
+      });
+    }
 
     // Hachage du mot de passe
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     // Création de l'utilisateur
-    const user = await User.create({
-      firstName,
-      lastName,
+    const userData = {
+      unique_id: uuidv4(),
+      name,
       email,
       password: hashedPassword,
+      role,
       last_login: null,
       is_verified: false,
-      skills: [],
-    });
+      skills: []
+    };
+
+    const user = await User.create(userData);
 
     // On ne renvoie pas le mot de passe dans la réponse
     const userResponse = {
       id: user.id,
       unique_id: user.unique_id,
-      firstName: user.firstName,
-      lastName: user.lastName,
+      name: user.name,
       email: user.email,
+      role: user.role,
       is_verified: user.is_verified,
       last_login: user.last_login,
       skills: user.skills,
@@ -49,7 +60,7 @@ const createUser = async (req, res) => {
     };
 
     res.status(201).json({
-      message: `L'utilisateur ${user.firstName} ${user.lastName} a bien été créé.`,
+      message: `L'utilisateur ${user.name} a bien été créé avec le rôle ${user.role}.`,
       data: userResponse,
     });
   } catch (error) {

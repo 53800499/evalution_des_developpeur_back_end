@@ -5,7 +5,7 @@ const { ValidationError, UniqueConstraintError } = require("sequelize");
 const updateUser = async (req, res) => {
   try {
     const userId = req.params.id;
-    const { firstName, lastName, email, password } = req.body;
+    const { name, email, password, role } = req.body;
 
     // Vérifier si l'utilisateur existe
     const user = await User.findByPk(userId);
@@ -22,12 +22,19 @@ const updateUser = async (req, res) => {
         });
       }
     }
+    
+    // Validation du rôle si fourni
+    if (role && !['developer', 'admin', 'recruiter'].includes(role)) {
+      return res.status(400).json({
+        message: "Le rôle doit être 'developer', 'admin' ou 'recruiter'.",
+      });
+    }
 
     // Préparer les données à mettre à jour
     const updateData = {
-      firstName: firstName || user.firstName,
-      lastName: lastName || user.lastName,
+      name: name || user.name,
       email: email || user.email,
+      role: role || user.role
     };
 
     // Si un nouveau mot de passe est fourni, le hasher
@@ -43,9 +50,9 @@ const updateUser = async (req, res) => {
     const userResponse = {
       id: user.id,
       unique_id: user.unique_id,
-      firstName: user.firstName,
-      lastName: user.lastName,
+      name: user.name,
       email: user.email,
+      role: user.role,
       is_verified: user.is_verified,
       last_login: user.last_login,
       skills: user.skills,

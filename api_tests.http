@@ -1,10 +1,10 @@
-
 @baseUrl = http://localhost:3001
 @contentType = application/json
 @authToken = YOUR_TOKEN_HERE
 @userId = 1
 @recruiterId = 1
 @adminId = 1
+@testId = 1
 
 ###############################################
 # 1. TESTS DE BASE
@@ -17,15 +17,15 @@ GET {{baseUrl}}/ressources/
 # 2. GESTION DES UTILISATEURS
 ###############################################
 
-### Créer un nouvel utilisateur(develloper)
+### Créer un nouvel utilisateur (avec name au lieu de firstName/lastName)
 POST {{baseUrl}}/api/users
 Content-Type: {{contentType}}
 
 {
-  "firstName": "John",
-  "lastName": "Doe",
+  "name": "John Doe",
   "email": "john.doe@example.com",
-  "password": "Password123!"
+  "password": "Password123!",
+  "role": "developer"
 }
 
 ### Créer un autre utilisateur
@@ -33,10 +33,31 @@ POST {{baseUrl}}/api/users
 Content-Type: {{contentType}}
 
 {
-  "firstName": "Jane",
-  "lastName": "Smith",
+  "name": "Jane Smith",
   "email": "jane.smith@example.com",
-  "password": "Password456!"
+  "password": "Password456!",
+  "role": "developer"
+}
+
+### Tentative de création d'un utilisateur sans rôle (doit échouer)
+POST {{baseUrl}}/api/users
+Content-Type: {{contentType}}
+
+{
+  "name": "Missing Role",
+  "email": "missing.role@example.com",
+  "password": "Password123!"
+}
+
+### Tentative de création d'un utilisateur avec un rôle invalide (doit échouer)
+POST {{baseUrl}}/api/users
+Content-Type: {{contentType}}
+
+{
+  "name": "Invalid Role",
+  "email": "invalid.role@example.com",
+  "password": "Password123!",
+  "role": "invalid_role"
 }
 
 ### Se connecter
@@ -80,8 +101,7 @@ Authorization: Bearer {{authToken}}
 Content-Type: {{contentType}}
 
 {
-  "firstName": "John",
-  "lastName": "Updated",
+  "name": "John Updated",
   "email": "john.updated@example.com"
 }
 
@@ -91,8 +111,7 @@ Authorization: Bearer {{authToken}}
 Content-Type: {{contentType}}
 
 {
-  "firstName": "NonExistent",
-  "lastName": "User",
+  "name": "NonExistent User",
   "email": "nonexistent@example.com"
 }
 
@@ -103,6 +122,38 @@ Authorization: Bearer {{authToken}}
 ### Supprimer un utilisateur inexistant (test d'erreur)
 DELETE {{baseUrl}}/api/users/999
 Authorization: Bearer {{authToken}}
+
+### Filtrer les utilisateurs par rôle (admin)
+GET {{baseUrl}}/api/users?role=admin
+Authorization: Bearer {{authToken}}
+
+### Filtrer les utilisateurs par rôle (developer)
+GET {{baseUrl}}/api/users?role=developer
+Authorization: Bearer {{authToken}}
+
+### Filtrer les utilisateurs par rôle (recruiter)
+GET {{baseUrl}}/api/users?role=recruiter
+Authorization: Bearer {{authToken}}
+
+### Créer un utilisateur avec un rôle spécifique
+POST {{baseUrl}}/api/users
+Content-Type: {{contentType}}
+
+{
+  "name": "Admin User",
+  "email": "admin.user@example.com",
+  "password": "Password123!",
+  "role": "admin"
+}
+
+### Mettre à jour le rôle d'un utilisateur
+PUT {{baseUrl}}/api/users/{{userId}}
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+  "role": "recruiter"
+}
 
 ###############################################
 # 3. GESTION DES RECRUTEURS
@@ -315,3 +366,266 @@ Content-Type: {{contentType}}
   "lastName": "Admin"
   // Champs obligatoires manquants
 }
+
+###############################################
+# 6. GESTION DES TESTS DE CODE
+###############################################
+
+### Créer un nouveau test
+POST {{baseUrl}}/api/tests
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+  "name": "Algorithme de tri à bulles",
+  "description": "Implementer un algorithme de tri à bulles pour trier un tableau d'entiers",
+  "difficulty": "Intermédiaire",
+  "language": "JavaScript",
+  "category": "Algorithmes",
+  "duration": 60,
+  "passing_score": 70,
+  "skills": ["JavaScript", "Algorithmes"]
+}
+
+### Test création sans nom (doit échouer)
+POST {{baseUrl}}/api/tests
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+  "description": "Test sans nom",
+  "difficulty": "Intermédiaire",
+  "language": "JavaScript",
+  "category": "Algorithmes",
+  "duration": 60,
+  "passing_score": 70,
+  "skills": ["JavaScript", "Algorithmes"]
+}
+
+### Test création sans description (doit échouer)
+POST {{baseUrl}}/api/tests
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+  "name": "Test sans description",
+  "difficulty": "Intermédiaire",
+  "language": "JavaScript",
+  "category": "Algorithmes",
+  "duration": 60,
+  "passing_score": 70,
+  "skills": ["JavaScript", "Algorithmes"]
+}
+
+### Test création sans language (doit échouer)
+POST {{baseUrl}}/api/tests
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+  "name": "Test sans langage",
+  "description": "Test sans langage spécifié",
+  "difficulty": "Intermédiaire",
+  "category": "Algorithmes",
+  "duration": 60,
+  "passing_score": 70,
+  "skills": ["JavaScript", "Algorithmes"]
+}
+
+### Test création avec skills vide (doit échouer)
+POST {{baseUrl}}/api/tests
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+  "name": "Test sans compétences",
+  "description": "Test avec un tableau de compétences vide",
+  "difficulty": "Intermédiaire",
+  "language": "JavaScript",
+  "category": "Algorithmes",
+  "duration": 60,
+  "passing_score": 70,
+  "skills": []
+}
+
+### Créer un autre test
+POST {{baseUrl}}/api/tests
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+  "name": "Recherche binaire",
+  "description": "Implémenter une fonction de recherche binaire pour trouver un élément dans un tableau trié",
+  "difficulty": "Avancé",
+  "language": "Python",
+  "category": "Algorithmes",
+  "duration": 90,
+  "passing_score": 80,
+  "skills": ["Python", "Algorithmes"]
+}
+
+### Récupérer tous les tests
+GET {{baseUrl}}/api/tests
+Authorization: Bearer {{authToken}}
+
+### Filtrer les tests par difficulté
+GET {{baseUrl}}/api/tests?difficulty=Intermédiaire
+Authorization: Bearer {{authToken}}
+
+### Filtrer les tests par langage
+GET {{baseUrl}}/api/tests?language=JavaScript
+Authorization: Bearer {{authToken}}
+
+### Filtrer les tests par catégorie
+GET {{baseUrl}}/api/tests?category=Frontend
+Authorization: Bearer {{authToken}}
+
+### Filtrer les tests par difficulté et catégorie
+GET {{baseUrl}}/api/tests?difficulty=Intermédiaire&category=Algorithmes
+Authorization: Bearer {{authToken}}
+
+### Filtrer les tests par skills
+GET {{baseUrl}}/api/tests?skills=JavaScript
+Authorization: Bearer {{authToken}}
+
+### Filtrer avec une valeur invalide (doit retourner une erreur)
+GET {{baseUrl}}/api/tests?difficulty=Invalid
+Authorization: Bearer {{authToken}}
+
+### Rechercher des tests par nom
+GET {{baseUrl}}/api/tests?name=tri
+Authorization: Bearer {{authToken}}
+
+### Récupérer un test spécifique
+GET {{baseUrl}}/api/tests/{{testId}}
+Authorization: Bearer {{authToken}}
+
+### Récupérer un test inexistant (test d'erreur)
+GET {{baseUrl}}/api/tests/999
+Authorization: Bearer {{authToken}}
+
+### Mettre à jour un test
+PUT {{baseUrl}}/api/tests/{{testId}}
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+  "name": "Algorithme de tri à bulles - Optimisé",
+  "description": "Implementer un algorithme de tri à bulles optimisé pour trier un tableau d'entiers",
+  "difficulty": "Expert",
+  "category": "Algorithmes",
+  "duration": 120,
+  "passing_score": 90,
+  "skills": ["JavaScript", "Algorithmes", "Optimisation"]
+}
+
+### Test de mise à jour partielle
+PUT {{baseUrl}}/api/tests/{{testId}}
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+  "difficulty": "Débutant",
+  "duration": 30,
+  "passing_score": 50
+}
+
+### Test de mise à jour avec skills vide (doit échouer)
+PUT {{baseUrl}}/api/tests/{{testId}}
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+  "skills": []
+}
+
+### Test de mise à jour du langage
+PUT {{baseUrl}}/api/tests/{{testId}}
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+  "language": "Python"
+}
+
+### Test de mise à jour avec champ non autorisé (doit être ignoré)
+PUT {{baseUrl}}/api/tests/{{testId}}
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+  "name": "Test mise à jour",
+  "invalid_field": "Cette valeur doit être ignorée"
+}
+
+### Test avec difficulté invalide
+POST {{baseUrl}}/api/tests
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+  "name": "Test invalide",
+  "description": "Test avec une difficulté invalide",
+  "difficulty": "Impossible",
+  "language": "JavaScript",
+  "category": "Frontend",
+  "duration": 60,
+  "passing_score": 70,
+  "skills": ["JavaScript", "React"]
+}
+
+### Test avec catégorie invalide
+POST {{baseUrl}}/api/tests
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+  "name": "Test invalide",
+  "description": "Test avec une catégorie invalide",
+  "difficulty": "Intermédiaire",
+  "language": "JavaScript",
+  "category": "InvalidCategory",
+  "duration": 60,
+  "passing_score": 70,
+  "skills": ["JavaScript", "React"]
+}
+
+### Test avec durée invalide
+POST {{baseUrl}}/api/tests
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+  "name": "Test invalide",
+  "description": "Test avec une durée invalide",
+  "difficulty": "Intermédiaire",
+  "language": "JavaScript",
+  "category": "Frontend",
+  "duration": 45,
+  "passing_score": 70,
+  "skills": ["JavaScript", "React"]
+}
+
+### Test avec score invalide
+POST {{baseUrl}}/api/tests
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+  "name": "Test invalide",
+  "description": "Test avec un score invalide",
+  "difficulty": "Intermédiaire",
+  "language": "JavaScript",
+  "category": "Frontend",
+  "duration": 60,
+  "passing_score": 65,
+  "skills": ["JavaScript", "React"]
+}
+
+### Supprimer un test
+DELETE {{baseUrl}}/api/tests/{{testId}}
+Authorization: Bearer {{authToken}}
+
+### Supprimer un test inexistant (test d'erreur)
+DELETE {{baseUrl}}/api/tests/999
+Authorization: Bearer {{authToken}}

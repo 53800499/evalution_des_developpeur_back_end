@@ -41,6 +41,13 @@ require("./src/routes/admin/updateAdmin")(app);
 require("./src/routes/admin/deleteAdmin")(app);
 require("./src/routes/admin/login")(app);
 
+// Routes Tests
+require("./src/routes/test/findAllTests")(app);
+require("./src/routes/test/findTestByPk")(app);
+require("./src/routes/test/createTest")(app);
+require("./src/routes/test/updateTest")(app);
+require("./src/routes/test/deleteTest")(app);
+
 // Gestion des erreurs 404
 app.use(({ res }) => {
   const message = `Impossible de récupérer la ressource demandée`;

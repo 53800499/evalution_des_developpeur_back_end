@@ -13,20 +13,11 @@ module.exports = (sequelize, DataTypes) => {
         unique: true,
         allowNull: false,
       },
-      firstName: {
+      name: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-          len: [2, 50],
-          is: /^[A-Za-zÀ-ÖØ-öø-ÿ' -]+$/u,
-          notEmpty: true,
-        },
-      },
-      lastName: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          len: [2, 50],
+          len: [2, 100],
           is: /^[A-Za-zÀ-ÖØ-öø-ÿ' -]+$/u,
           notEmpty: true,
         },
@@ -43,6 +34,17 @@ module.exports = (sequelize, DataTypes) => {
       password: {
         type: DataTypes.STRING,
         allowNull: false,
+      },
+      role: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: { msg: 'Le rôle est requis' },
+          isIn: {
+            args: [['developer', 'admin', 'recruiter']],
+            msg: "Le rôle doit être 'developer', 'admin' ou 'recruiter'"
+          }
+        }
       },
       last_login: {
         type: DataTypes.DATE,

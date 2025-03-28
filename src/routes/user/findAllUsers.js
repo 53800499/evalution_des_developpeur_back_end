@@ -15,17 +15,19 @@ module.exports = (app) => {
         return res.status(400).json({ message })        
       }
 
+      const whereClause = {
+        name: { [Op.like]: `%${name}%` }
+      }
+      
+      if (req.query.role) {
+        whereClause.role = req.query.role;
+      }
+
       return User.findAndCountAll({ 
-        where: { 
-          [Op.or]: [
-            { firstName: { [Op.like]: `%${name}%` } },
-            { lastName: { [Op.like]: `%${name}%` } },
-            { firstName: { [Op.startsWith]: capitalize(name) } },
-            { lastName: { [Op.startsWith]: capitalize(name) } }
-          ]
-        },
-        order: [['firstName', 'ASC'], ['lastName', 'ASC']],
-        limit: limit
+        where: whereClause,
+        order: [['id', 'ASC']],
+        limit: limit,
+        attributes: { exclude: ['password'] }
       })
       .then(({ count, rows }) => {
         const message = count > 0 
@@ -40,12 +42,20 @@ module.exports = (app) => {
       })
     } 
     else {
+      const whereClause = {};
+      
+      if (req.query.role) {
+        whereClause.role = req.query.role;
+      }
+      
       User.findAll({ 
-        order: [['firstName', 'ASC'], ['lastName', 'ASC']],
+        where: whereClause,
+        order: [['id', 'ASC']],
         attributes: { exclude: ['password'] }
       })
       .then(users => {
-        const message = 'La liste des utilisateurs a bien été récupérée.'
+        const roleFilter = req.query.role ? ` avec le rôle '${req.query.role}'` : '';
+        const message = `La liste des utilisateurs${roleFilter} a bien été récupérée.`
         res.json({ message, data: users })
       })
       .catch(error => {
