@@ -25,28 +25,26 @@ require("./src/routes/user/updateUser")(app);
 require("./src/routes/user/deleteUser")(app);
 require("./src/routes/user/login")(app);
 
-// Routes Recruiters
-require("./src/routes/recruiter/findAllRecruiters")(app);
-require("./src/routes/recruiter/findRecruiterByPk")(app);
-require("./src/routes/recruiter/createRecruiter")(app);
-require("./src/routes/recruiter/updateRecruiter")(app);
-require("./src/routes/recruiter/deleteRecruiter")(app);
-require("./src/routes/recruiter/login")(app);
-
-// Routes Admins
-require("./src/routes/admin/findAllAdmins")(app);
-require("./src/routes/admin/findAdminByPk")(app);
-require("./src/routes/admin/createAdmin")(app);
-require("./src/routes/admin/updateAdmin")(app);
-require("./src/routes/admin/deleteAdmin")(app);
-require("./src/routes/admin/login")(app);
-
 // Routes Tests
 require("./src/routes/test/findAllTests")(app);
 require("./src/routes/test/findTestByPk")(app);
 require("./src/routes/test/createTest")(app);
 require("./src/routes/test/updateTest")(app);
 require("./src/routes/test/deleteTest")(app);
+
+// Routes UserTests
+require("./src/routes/user_test/findAllUserTests")(app);
+require("./src/routes/user_test/findUserTestByPk")(app);
+require("./src/routes/user_test/createUserTest")(app);
+require("./src/routes/user_test/updateUserTest")(app);
+require("./src/routes/user_test/deleteUserTest")(app);
+
+// Routes UserTestResults
+require("./src/routes/user_test_result/findAllUserTestResults")(app);
+require("./src/routes/user_test_result/findUserTestResultByPk")(app);
+require("./src/routes/user_test_result/createUserTestResult")(app);
+require("./src/routes/user_test_result/updateUserTestResult")(app);
+require("./src/routes/user_test_result/deleteUserTestResult")(app);
 
 // Gestion des erreurs 404
 app.use(({ res }) => {

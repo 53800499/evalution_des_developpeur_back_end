@@ -1,6 +1,6 @@
 @baseUrl = http://localhost:3001
 @contentType = application/json
-@authToken = YOUR_TOKEN_HERE
+@authToken = YOUR_TOKEN_HEREgvuvuyv
 @userId = 1
 @recruiterId = 1
 @adminId = 1
@@ -628,4 +628,258 @@ Authorization: Bearer {{authToken}}
 
 ### Supprimer un test inexistant (test d'erreur)
 DELETE {{baseUrl}}/api/tests/999
+Authorization: Bearer {{authToken}}
+
+###############################################
+# 7. GESTION DES TESTS UTILISATEUR
+###############################################
+
+### Création d'un test utilisateur
+POST {{baseUrl}}/api/user-tests
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+  "user_id": 1,
+  "test_id": 1,
+  "score": 85,
+  "status": "completed",
+  "result_details": {
+    "correct_answers": 17,
+    "total_questions": 20,
+    "time_taken_minutes": 45
+  }
+}
+
+### Création d'un test utilisateur en cours
+POST {{baseUrl}}/api/user-tests
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+  "user_id": 2,
+  "test_id": 1,
+  "score": 0,
+  "status": "in_progress"
+}
+
+### Création avec un score invalide (doit échouer)
+POST {{baseUrl}}/api/user-tests
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+  "user_id": 1,
+  "test_id": 1,
+  "score": 120,
+  "status": "completed"
+}
+
+### Création avec un statut invalide (doit échouer)
+POST {{baseUrl}}/api/user-tests
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+  "user_id": 1,
+  "test_id": 1,
+  "score": 75,
+  "status": "invalid_status"
+}
+
+### Récupération de tous les tests utilisateur
+GET {{baseUrl}}/api/user-tests
+Authorization: Bearer {{authToken}}
+
+### Filtrage par utilisateur
+GET {{baseUrl}}/api/user-tests?user_id=1
+Authorization: Bearer {{authToken}}
+
+### Filtrage par test
+GET {{baseUrl}}/api/user-tests?test_id=1
+Authorization: Bearer {{authToken}}
+
+### Filtrage par statut
+GET {{baseUrl}}/api/user-tests?status=completed
+Authorization: Bearer {{authToken}}
+
+### Filtrage combiné
+GET {{baseUrl}}/api/user-tests?user_id=1&status=completed
+Authorization: Bearer {{authToken}}
+
+### Récupération d'un test utilisateur spécifique
+GET {{baseUrl}}/api/user-tests/1
+Authorization: Bearer {{authToken}}
+
+### Récupération d'un test utilisateur inexistant
+GET {{baseUrl}}/api/user-tests/999
+Authorization: Bearer {{authToken}}
+
+### Mise à jour d'un test utilisateur
+PUT {{baseUrl}}/api/user-tests/1
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+  "score": 90,
+  "status": "completed",
+  "end_time": "2025-03-30T15:00:00Z",
+  "result_details": {
+    "correct_answers": 18,
+    "total_questions": 20,
+    "time_taken_minutes": 52
+  }
+}
+
+### Mise à jour avec un score invalide
+PUT {{baseUrl}}/api/user-tests/1
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+  "score": -10
+}
+
+### Mise à jour avec un statut invalide
+PUT {{baseUrl}}/api/user-tests/1
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+  "status": "incorrect_status"
+}
+
+### Suppression d'un test utilisateur
+DELETE {{baseUrl}}/api/user-tests/1
+Authorization: Bearer {{authToken}}
+
+### Suppression d'un test utilisateur inexistant
+DELETE {{baseUrl}}/api/user-tests/999
+Authorization: Bearer {{authToken}}
+
+###############################################
+# 8. GESTION DES RÉSULTATS DE TESTS
+###############################################
+
+### Création d'un résultat de test
+POST {{baseUrl}}/api/user-test-results
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+  "user_test_id": 1,
+  "error_type": "syntax_error",
+  "line_number": 25,
+  "suggestion": "Vérifiez la syntaxe de la fonction. Il manque une accolade fermante.",
+  "execution_time": 120
+}
+
+### Création d'un autre résultat de test
+POST {{baseUrl}}/api/user-test-results
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+  "user_test_id": 1,
+  "error_type": "logic_error",
+  "line_number": 42,
+  "suggestion": "La condition dans votre boucle while peut entraîner une boucle infinie.",
+  "execution_time": 85
+}
+
+### Création avec ID de test utilisateur invalide (doit échouer)
+POST {{baseUrl}}/api/user-test-results
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+  "user_test_id": 999,
+  "error_type": "syntax_error",
+  "line_number": 25,
+  "suggestion": "Vérifiez la syntaxe de la fonction.",
+  "execution_time": 120
+}
+
+### Création avec numéro de ligne invalide (doit échouer)
+POST {{baseUrl}}/api/user-test-results
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+  "user_test_id": 1,
+  "error_type": "syntax_error",
+  "line_number": 0,
+  "suggestion": "Vérifiez la syntaxe de la fonction.",
+  "execution_time": 120
+}
+
+### Création avec temps d'exécution invalide (doit échouer)
+POST {{baseUrl}}/api/user-test-results
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+  "user_test_id": 1,
+  "error_type": "syntax_error",
+  "line_number": 25,
+  "suggestion": "Vérifiez la syntaxe de la fonction.",
+  "execution_time": -10
+}
+
+### Récupération de tous les résultats de tests
+GET {{baseUrl}}/api/user-test-results
+Authorization: Bearer {{authToken}}
+
+### Filtrage par ID de test utilisateur
+GET {{baseUrl}}/api/user-test-results?user_test_id=1
+Authorization: Bearer {{authToken}}
+
+### Filtrage par type d'erreur
+GET {{baseUrl}}/api/user-test-results?error_type=syntax_error
+Authorization: Bearer {{authToken}}
+
+### Récupération d'un résultat de test spécifique
+GET {{baseUrl}}/api/user-test-results/1
+Authorization: Bearer {{authToken}}
+
+### Récupération d'un résultat de test inexistant
+GET {{baseUrl}}/api/user-test-results/999
+Authorization: Bearer {{authToken}}
+
+### Mise à jour d'un résultat de test
+PUT {{baseUrl}}/api/user-test-results/1
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+  "error_type": "syntax_error_updated",
+  "line_number": 26,
+  "suggestion": "Vérifiez la syntaxe de la fonction. Il manque une accolade fermante. Correction suggérée.",
+  "execution_time": 150
+}
+
+### Mise à jour avec numéro de ligne invalide
+PUT {{baseUrl}}/api/user-test-results/1
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+  "line_number": -5
+}
+
+### Mise à jour avec temps d'exécution invalide
+PUT {{baseUrl}}/api/user-test-results/1
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+  "execution_time": -20
+}
+
+### Suppression d'un résultat de test
+DELETE {{baseUrl}}/api/user-test-results/1
+Authorization: Bearer {{authToken}}
+
+### Suppression d'un résultat de test inexistant
+DELETE {{baseUrl}}/api/user-test-results/999
 Authorization: Bearer {{authToken}}

@@ -66,15 +66,15 @@ module.exports = (sequelize) => {
       }
     },
     skills: {
-      type: DataTypes.JSON,
+      type: DataTypes.TEXT,
       allowNull: false,
-      defaultValue: [],
+      defaultValue: '[]',
       get() {
         const rawValue = this.getDataValue('skills');
-        return rawValue ? (typeof rawValue === 'string' ? JSON.parse(rawValue) : rawValue) : [];
+        return rawValue ? JSON.parse(rawValue) : [];
       },
       set(value) {
-        this.setDataValue('skills', Array.isArray(value) ? value : []);
+        this.setDataValue('skills', Array.isArray(value) ? JSON.stringify(value) : '[]');
       },
       validate: {
         isValidSkillsArray(value) {

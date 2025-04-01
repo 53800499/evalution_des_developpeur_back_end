@@ -1,9 +1,9 @@
 require("dotenv").config();
 const { Sequelize, DataTypes } = require("sequelize");
 const UserModel = require("../models/user");
-const RecruiterModel = require("../models/recruiter");
-const AdminModel = require("../models/admin");
 const CodeTestModel = require("../models/code_test");
+const UserTestModel = require("../models/user_test");
+const UserTestResultModel = require("../models/user_test_result");
 
 // Configuration de la base de données
 const sequelize = new Sequelize(
@@ -29,9 +29,18 @@ const sequelize = new Sequelize(
 );
 
 const User = UserModel(sequelize, DataTypes);
-const Recruiter = RecruiterModel(sequelize, DataTypes);
-const Admin = AdminModel(sequelize, DataTypes);
 const CodeTest = CodeTestModel(sequelize, DataTypes);
+const UserTest = UserTestModel(sequelize, DataTypes);
+const UserTestResult = UserTestResultModel(sequelize, DataTypes);
+
+// Définition des relations
+UserTest.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
+UserTest.belongsTo(CodeTest, { foreignKey: 'test_id', as: 'test' });
+UserTestResult.belongsTo(UserTest, { foreignKey: 'user_test_id', as: 'userTest' });
+
+User.hasMany(UserTest, { foreignKey: 'user_id', as: 'userTests' });
+CodeTest.hasMany(UserTest, { foreignKey: 'test_id', as: 'userTests' });
+UserTest.hasMany(UserTestResult, { foreignKey: 'user_test_id', as: 'testResults' });
 
 const initDb = async () => {
   try {
@@ -58,7 +67,7 @@ const initDb = async () => {
 module.exports = {
   initDb,
   User,
-  Recruiter,
-  Admin,
-  CodeTest
+  CodeTest,
+  UserTest,
+  UserTestResult
 };
