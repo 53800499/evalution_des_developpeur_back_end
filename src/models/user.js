@@ -20,23 +20,7 @@ module.exports = (sequelize, DataTypes) => {
         notNull: { msg: 'L’identifiant utilisateur est requis.' }
       }
     },
-    lastName: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        len: {
-          args: [2, 50],
-          msg: 'Le nom de famille doit contenir entre 2 et 50 caractères.'
-        },
-        is: {
-          args: /^[A-Za-zÀ-ÖØ-öø-ÿ' -]+$/u,
-          msg: 'Le nom de famille ne doit contenir que des lettres, espaces ou apostrophes.'
-        },
-        notEmpty: { msg: 'Le nom de famille ne peut pas être vide.' },
-        notNull: { msg: 'Le nom de famille est une propriété requise.' }
-      }
-    },
-    firstName: {
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {

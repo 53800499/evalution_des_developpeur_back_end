@@ -5,10 +5,10 @@ const { ValidationError, UniqueConstraintError } = require("sequelize");
 module.exports = (app) => {
   app.post("/api/users", async (req, res) => {
     try {
-      const { firstName, lastName, email, password, last_login, is_verified, skills } = req.body;
+      const { name, email, password, last_login, is_verified, skills } = req.body;
 
       // Vérification des champs obligatoires
-      if (!firstName || !lastName || !email || !password) {
+      if (!name || !email || !password) {
         return res.status(400).json({ message: "Tous les champs obligatoires doivent être remplis." });
       }
 
@@ -18,8 +18,7 @@ module.exports = (app) => {
 
       // Création de l'utilisateur
       const user = await User.create({
-        firstName,
-        lastName,
+        name,
         email,
         password: hashedPassword, // On stocke le mot de passe haché
         last_login: '',
