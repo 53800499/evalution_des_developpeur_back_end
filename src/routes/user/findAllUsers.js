@@ -18,13 +18,11 @@ module.exports = (app) => {
       return User.findAndCountAll({ 
         where: { 
           [Op.or]: [
-            { firstName: { [Op.like]: `%${name}%` } },
-            { lastName: { [Op.like]: `%${name}%` } },
-            { firstName: { [Op.startsWith]: capitalize(name) } },
-            { lastName: { [Op.startsWith]: capitalize(name) } }
+            { name: { [Op.like]: `%${name}%` } },
+            { name: { [Op.startsWith]: capitalize(name) } }
           ]
         },
-        order: [['firstName', 'ASC'], ['lastName', 'ASC']],
+        order: [['name', 'ASC']],
         limit: limit
       })
       .then(({ count, rows }) => {

@@ -1,8 +1,9 @@
-GET http://localhost:3000/api/users
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwLCJpYXQiOjE3NDM1MDYxNDgsImV4cCI6MTc0MzU5MjU0OH0.mKa_nX_uxaytk6YeT6MrXzrvRCNcxbjbT8VUL-dMSWc
-# Content-Type: application/json
+POST http://localhost:3000/api/users
+# Authorization: Bearer 
+Content-Type: application/json
 
-# {
-#   "email": "email16979@gmail.com",
-#   "password": "Password2024"
-# }
+{
+  "name": "user",
+  "email": "email16979@gmail.com",
+  "password": "Password2024"
+}

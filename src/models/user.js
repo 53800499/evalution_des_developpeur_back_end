@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         len: {
           args: [2, 50],
-          msg: 'Le prénom doit contenir entre 2 et 50 caractères.'
+          msg: 'Le nom doit contenir entre 2 et 50 caractères.'
         },
         is: {
           args: /^[A-Za-zÀ-ÖØ-öø-ÿ' -]+$/u,
