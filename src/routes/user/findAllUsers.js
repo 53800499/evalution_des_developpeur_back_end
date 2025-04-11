@@ -35,7 +35,7 @@ module.exports = (app) => {
       })
     } 
     else {
-      User.findAll({ order: [['firstName', 'ASC'], ['lastName', 'ASC']] })
+      User.findAll({ order: [['name', 'ASC']] })
       .then(users => {
         const message = 'La liste des utilisateurs a bien été récupérée.'
         res.json({ message, data: users })
