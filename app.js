@@ -1,11 +1,33 @@
 require('dotenv').config();
 const express = require("express")
 const morgan = require("morgan")
+const cors = require("cors");
 const bodyParser = require("body-parser")
 const { initDb } = require("./src/db/sequelize") 
 
 const app = express()
-const port = 3000
+const port = process.env.SERVER_PORT || 3003;
+const allowedOrigins = process.env.CORS_ORIGIN.split(",");
+
+
+// Configuration CORS
+app.use(
+  cors({
+    origin: function(origin, callback) {
+      // Autorise les requêtes sans origin (comme curl ou mobile apps)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        return callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+  })
+);
+
 
 // Middleware
 app
