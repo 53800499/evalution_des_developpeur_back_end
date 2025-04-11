@@ -1,11 +1,11 @@
 const bcrypt = require("bcrypt");
-const { User } = require("../../db/sequelize");
+const { Admin } = require("../../db/sequelize");
 const { ValidationError, UniqueConstraintError } = require("sequelize");
 
 module.exports = (app) => {
-  app.post("/api/users", async (req, res) => {
+  app.post("/api/admins", async (req, res) => {
     try {
-      const { name, email, password, last_login, is_verified, skills } = req.body;
+      const { email, password, name, last_login, is_verified } = req.body;
 
       // Vérification des champs obligatoires
       if (!name || !email || !password) {
@@ -17,18 +17,17 @@ module.exports = (app) => {
       const hashedPassword = await bcrypt.hash(password, saltRounds);
 
       // Création de l'utilisateur
-      const user = await User.create({
+      const admin = await Admin.create({
         name,
         email,
         password: hashedPassword, // On stocke le mot de passe haché
         last_login: '',
-        is_verified: false, 
-        skills: []
+        is_verified: false
       });
 
       res.status(201).json({
-        message: `L'utilisateur ${user.name} a bien été créé.`,
-        data: user
+        message: `L' admin' ${admin.name} a bien été créé.`,
+        data: admin
       });
 
     } catch (error) {

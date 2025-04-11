@@ -1,8 +1,8 @@
-GET http://localhost:3000/api/users/3
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjgsImlhdCI6MTc0NDM3MTUyMywiZXhwIjoxNzQ0NDU3OTIzfQ.GLP046PX6Nc0tgRmVNrlgjna2K2jE1a6BaVheXMfuxY
+delete http://localhost:3000/api/admins/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjozLCJpYXQiOjE3NDQ0MDU3NDAsImV4cCI6MTc0NDQ5MjE0MH0.yrc87W-mhDc2ph6GUK0W_k4g1rYmHogrNkjZ9afVK04
 # Content-Type: application/json
 
 # {
-#   "email": "user3@gmail.com",
-#   "password": "Password2024"
+#   "email": "recruter111000@gmail.com",
+#    "name": "Recruiterfirst"
 # }

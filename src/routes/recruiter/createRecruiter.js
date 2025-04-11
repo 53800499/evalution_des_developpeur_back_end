@@ -1,14 +1,14 @@
 const bcrypt = require("bcrypt");
-const { User } = require("../../db/sequelize");
+const { Recruiter } = require("../../db/sequelize");
 const { ValidationError, UniqueConstraintError } = require("sequelize");
 
 module.exports = (app) => {
-  app.post("/api/users", async (req, res) => {
+  app.post("/api/recruiters", async (req, res) => {
     try {
-      const { name, email, password, last_login, is_verified, skills } = req.body;
+      const { email, password, name, company_name, last_login, is_verified } = req.body;
 
       // Vérification des champs obligatoires
-      if (!name || !email || !password) {
+      if (!name || !email || !password || !company_name) {
         return res.status(400).json({ message: "Tous les champs obligatoires doivent être remplis." });
       }
 
@@ -17,18 +17,18 @@ module.exports = (app) => {
       const hashedPassword = await bcrypt.hash(password, saltRounds);
 
       // Création de l'utilisateur
-      const user = await User.create({
-        name,
+      const recruiter = await Recruiter.create({
         email,
         password: hashedPassword, // On stocke le mot de passe haché
+        name,
+        company_name,
         last_login: '',
-        is_verified: false, 
-        skills: []
+        is_verified: false
       });
 
       res.status(201).json({
-        message: `L'utilisateur ${user.name} a bien été créé.`,
-        data: user
+        message: `Le Recruteur ${recruiter.name} a bien été créé.`,
+        data: recruiter
       });
 
     } catch (error) {
@@ -40,7 +40,7 @@ module.exports = (app) => {
         return res.status(400).json({ message: "Cet email est déjà utilisé.", data: error });
       }
 
-      console.error("Erreur lors de la création de l'utilisateur :", error);
+      console.error("Erreur lors de la création du recruteur :", error);
       res.status(500).json({
         message: "Échec de la création de l'utilisateur. Veuillez réessayer plus tard.",
         error: error.message

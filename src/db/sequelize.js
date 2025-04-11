@@ -1,6 +1,8 @@
 require('dotenv').config()
 const { Sequelize, DataTypes } = require('sequelize')
 const UserModel = require('../models/user')
+const RecruiterModel = require('../models/recruiter')
+const AdminModel = require("../models/admin")
 
 // Connexion sécurisée avec des variables d'environnement
 const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
@@ -13,6 +15,8 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
 })
 
 const User = UserModel(sequelize, DataTypes)
+const Recruiter = RecruiterModel(sequelize, DataTypes)
+const Admin = AdminModel(sequelize, DataTypes)
 
 const initDb = async () => {
   try {
@@ -26,5 +30,5 @@ const initDb = async () => {
 }
 
 module.exports = { 
-  initDb, User
+  initDb, User, Recruiter, Admin
 }
