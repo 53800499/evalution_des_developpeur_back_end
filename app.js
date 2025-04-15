@@ -7,8 +7,15 @@ const { initDb } = require("./src/db/sequelize")
 
 const app = express()
 const port = process.env.SERVER_PORT || 3003;
-const allowedOrigins = process.env.CORS_ORIGIN.split(",");
+const allowedOrigins = (process.env.CORS_ORIGIN || "").split(",");
+const OpenAI = require("openai");
 
+// Initialisation de l'API OpenAI
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY
+});
+
+app.use(express.json());
 
 // Configuration CORS
 app.use(
@@ -28,47 +35,47 @@ app.use(
   })
 );
 
-
 // Middleware
-app
-  .use(morgan("dev"))
-  .use(bodyParser.json())
+app.use(morgan("dev")).use(bodyParser.json());
+
+app.use(express.json());
 
 // Initialisation de la base de données
-initDb()
+initDb();
 
 // Routes (exemple basique)
 app.get("/ressources/", (req, res) => {
-  res.json({ message: "Bienvenue sur notre API !" })
-})
-
-// Ici nous afficherons nos routes
+  res.json({ message: "Bienvenue sur notre API !" });
+});
 
 // : Users
 
-require("./src/routes/user/findAllUsers")(app)
-require("./src/routes/user/findUserByPk")(app)
-require("./src/routes/user/createUser")(app)
-require("./src/routes/user/updateUser")(app)
-require("./src/routes/user/deleteUser")(app)
-require("./src/routes/user/login")(app)
+require("./src/routes/user/findAllUsers")(app);
+require("./src/routes/user/findUserByPk")(app);
+require("./src/routes/user/createUser")(app);
+require("./src/routes/user/updateUser")(app);
+require("./src/routes/user/deleteUser")(app);
+require("./src/routes/user/login")(app);
 
 // : Recruiter
 
-require("./src/routes/recruiter/createRecruiter")(app)
-require("./src/routes/recruiter/findAllRecruiter")(app)
-require("./src/routes/recruiter/findRecruiterByPk")(app)
-require("./src/routes/recruiter/updateRecruiter")(app)
-require("./src/routes/recruiter/deleteRecruiter")(app)
-require("./src/routes/recruiter/login")(app)
+require("./src/routes/recruiter/createRecruiter")(app);
+require("./src/routes/recruiter/findAllRecruiter")(app);
+require("./src/routes/recruiter/findRecruiterByPk")(app);
+require("./src/routes/recruiter/updateRecruiter")(app);
+require("./src/routes/recruiter/deleteRecruiter")(app);
+require("./src/routes/recruiter/login")(app);
 
 // : Admin
-require("./src/routes/admin/createAdmin")(app)
-require("./src/routes/admin/findAllAdmin")(app)
-require("./src/routes/admin/findAdminByPk")(app)
-require("./src/routes/admin/updateAdmin")(app)
-require("./src/routes/admin/deleteAdmin")(app)
-require("./src/routes/admin/login")(app)
+require("./src/routes/admin/createAdmin")(app);
+require("./src/routes/admin/findAllAdmin")(app);
+require("./src/routes/admin/findAdminByPk")(app);
+require("./src/routes/admin/updateAdmin")(app);
+require("./src/routes/admin/deleteAdmin")(app);
+require("./src/routes/admin/login")(app);
+
+// : IA
+require("./src/routes/ia/analyse")(app, openai);
 
 app.use(({ res } ) => {
     const message = `Impossible de récupérer la ressource demandée`

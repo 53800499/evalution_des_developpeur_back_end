@@ -13,9 +13,12 @@
     "body-parser": "^1.20.3",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
+    "eslint": "^8.56.0",
     "express": "^4.21.2",
+    "jshint": "^2.13.6",
     "jsonwebtoken": "^9.0.2",
     "mariadb": "^3.4.0",
+    "openai": "^4.93.0",
     "sequelize": "^6.37.6",
     "serve-favicon": "^2.5.0"
   },

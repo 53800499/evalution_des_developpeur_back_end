@@ -28,7 +28,12 @@ module.exports = (app) => {
         { expiresIn: '24h' }
       );
 
-      return res.json({ message: "Connexion réussie.", data: recruiter, token });
+      return res.json({
+        message: "Connexion réussie.",
+        data: recruiter,
+        token,
+        table: "recruiter"
+      });
 
     } catch (error) {
       console.error("Erreur de connexion :", error);
