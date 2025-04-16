@@ -70,6 +70,55 @@ require("./src/routes/admin/updateAdmin")(app)
 require("./src/routes/admin/deleteAdmin")(app)
 require("./src/routes/admin/login")(app)
 
+// : ProgrammingLanguage
+require("./src/routes/programmingLanguage/createProgrammingLanguage")(app)
+require("./src/routes/programmingLanguage/deleteProgrammingLanguage")(app)
+require("./src/routes/programmingLanguage/findAllProgrammingLanguages")(app)
+require("./src/routes/programmingLanguage/findProgrammingLanguageByPk")(app)
+require("./src/routes/programmingLanguage/updateProgrammingLanguage")(app)
+
+
+// : codez Test
+require("./src/routes/codeTest/createCodeTest")(app)
+require("./src/routes/codeTest/deleteCodeTest")(app)
+require("./src/routes/codeTest/findAllCodeTests")(app)
+require("./src/routes/codeTest/findCodeTestByPk")(app)
+require("./src/routes/codeTest/updateCodeTest")(app)
+
+
+// : use tests
+require("./src/routes/userTest/createUserTest")(app)
+require("./src/routes/userTest/deleteUserTest")(app)
+require("./src/routes/userTest/findAllUserTests")(app)
+require("./src/routes/userTest/findUserTestByPk")(app)
+require("./src/routes/userTest/updateUserTest")(app)
+
+
+
+// : user test result
+require("./src/routes/userTestResult/createUserTestResult")(app)
+require("./src/routes/userTestResult/deleteUserTestResult")(app)
+require("./src/routes/userTestResult/findAllUserTestResults")(app)
+require("./src/routes/userTestResult/findUserTestResultByPk")(app)
+require("./src/routes/userTestResult/updateUserTestResult")(app)
+
+
+// : plagiarism results
+require("./src/routes/plagiarismResult/createPlagiarismResult")(app)
+require("./src/routes/plagiarismResult/deletePlagiarismResult")(app)
+require("./src/routes/plagiarismResult/findAllPlagiarismResults")(app)
+require("./src/routes/plagiarismResult/findPlagiarismResultByPk")(app)
+require("./src/routes/plagiarismResult/updatePlagiarismResult")(app)
+
+
+
+
+
+
+
+
+
+
 app.use(({ res } ) => {
     const message = `Impossible de récupérer la ressource demandée`
     res.status(404).json({message})
