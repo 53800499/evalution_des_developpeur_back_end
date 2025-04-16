@@ -4,8 +4,9 @@ const morgan = require("morgan")
 const cors = require("cors");
 const bodyParser = require("body-parser")
 const { initDb } = require("./src/db/sequelize") 
+const auth = require("./src/auth/auth");
 
-const app = express()
+const app = express();
 const port = process.env.SERVER_PORT || 3003;
 const allowedOrigins = (process.env.CORS_ORIGIN || "").split(",");
 const OpenAI = require("openai");
@@ -56,6 +57,7 @@ require("./src/routes/user/createUser")(app);
 require("./src/routes/user/updateUser")(app);
 require("./src/routes/user/deleteUser")(app);
 require("./src/routes/user/login")(app);
+require("./src/auth/verifyAuth")(app);
 
 // : Recruiter
 

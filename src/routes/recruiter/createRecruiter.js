@@ -8,7 +8,7 @@ module.exports = (app) => {
       const { email, password, name, company_name, last_login, is_verified } = req.body;
 
       // Vérification des champs obligatoires
-      if (!name || !email || !password || !company_name) {
+      if (!name || !email || !password) {
         return res.status(400).json({ message: "Tous les champs obligatoires doivent être remplis." });
       }
 
@@ -21,7 +21,7 @@ module.exports = (app) => {
         email,
         password: hashedPassword, // On stocke le mot de passe haché
         name,
-        company_name,
+        company_name:'',
         last_login: '',
         is_verified: false
       });

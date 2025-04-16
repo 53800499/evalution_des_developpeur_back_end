@@ -43,11 +43,11 @@ module.exports = (sequelize, DataTypes) => {
       },
       company_name: {
         type: DataTypes.STRING(255),
-        allowNull: false,
+        allowNull: true/* ,
         validate: {
           notEmpty: { msg: 'Le nom de l\'entreprise est requis.' },
           notNull: { msg: 'Le nom de l\'entreprise est requis.' }
-        }
+        } */
       },
       last_login: {
         type: DataTypes.DATE,

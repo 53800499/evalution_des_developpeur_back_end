@@ -18,7 +18,7 @@ module.exports = (req, res, next) => {
 
     // Vérification de la cohérence entre l'ID du token et celui du body (si fourni)
     if (req.body.userId && req.body.userId !== decodedToken.userId) {
-      return res.status(403).json({ message: "L'identifiant de l'utilisateur est invalide." });
+      return res.status(403).json({ message: "L'identifiant de l'utilisateur est invalide." }); 
     }
 
     next(); // Passer au middleware suivant si tout est OK
